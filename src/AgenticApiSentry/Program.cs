@@ -33,7 +33,7 @@ Identify spec quality issues and security gaps and provide concrete fixes.
 Only use registered tools. Return a structured summary with severity.
 """;
 
-var executor = StaticAgentExecutor.Builder()
+var executor = StaticAgentExecutor.CreateBuilder()
     .WithTools(tools)
     .WithMission(mission)
     .Build();
