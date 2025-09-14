@@ -2,6 +2,10 @@
 
 **Agentic API Sentry** is a lightweight, **static, mission-bound agent** that evaluates any **OpenAPI 3.0 specification** for governance and compliance readiness.  
 It helps architects, developers, and DevOps teams ensure API specs meet **quality, security, and observability standards** before moving into production.
+## 📚 Author
+
+Mahendhiran Krishnan  
+LinkedIn: [Mahendhiran Krishnan](https://www.linkedin.com/in/mahendhiran-krishnan-04a5292b/)
 
 ## Overview
 Works with or without an LLM. The v1 rules are code-based. If you add an LLM, it will summarize findings.  
