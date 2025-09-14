@@ -12,7 +12,8 @@ namespace AgenticApiSentry.Agent
         }
 
         // Single Builder definition only
-        public static Builder Builder() => new Builder();
+        //public static Builder Builder() => new Builder();
+        public static Builder CreateBuilder() => new Builder();
 
         public async Task<List<ToolResult>> RunAsync(object context)
         {
