@@ -1,0 +1,111 @@
+
+openapi: 3.0.0
+info:
+  title: Demo Bank API
+  version: 1.0.0
+servers:
+  - url: https://api.demo-bank.com/v1
+paths:
+  /accounts:
+    get:
+      summary: List all accounts
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+  /accounts/{accountId}:
+    get:
+      summary: Get account details by ID
+      parameters:
+        - in: path
+          name: accountId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Account details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '404':
+          description: Account not found
+  /transactions:
+    get:
+      summary: List recent transactions
+      parameters:
+        - in: query
+          name: accountId
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Transaction list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transaction'
+  /payments:
+    post:
+      summary: Initiate a payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        '201':
+          description: Payment created
+        '400':
+          description: Invalid payment request
+components:
+  schemas:
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        balance:
+          type: number
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        accountId:
+          type: string
+        amount:
+          type: number
+        type:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+    PaymentRequest:
+      type: object
+      properties:
+        fromAccountId:
+          type: string
+        toAccountId:
+          type: string
+        amount:
+          type: number
+security:
+  - api_key: []
