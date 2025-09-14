@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: |
+          if [ -f "agentic-api-sentry.sln" ]; then
+            dotnet restore agentic-api-sentry.sln
+          elif [ -f "src/AgenticApiSentry/AgenticApiSentry.csproj" ]; then
+            dotnet restore src/AgenticApiSentry/AgenticApiSentry.csproj
+          else
+            echo "No solution or csproj found to restore."
+          fi
+
+      - name: Build (Release)
+        run: |
+          if [ -f "agentic-api-sentry.sln" ]; then
+            dotnet build agentic-api-sentry.sln -c Release --no-restore
+          elif [ -f "src/AgenticApiSentry/AgenticApiSentry.csproj" ]; then
+            dotnet build src/AgenticApiSentry/AgenticApiSentry.csproj -c Release --no-restore
+          else
+            echo "No solution or csproj found to build."
+          fi
+
+      - name: Test (if tests exist)
+        run: |
+          if [ -f "tests/AgenticApiSentry.Tests/AgenticApiSentry.Tests.csproj" ]; then
+            dotnet test tests/AgenticApiSentry.Tests/AgenticApiSentry.Tests.csproj -c Release --no-build --logger "trx;LogFileName=test_results.trx"
+          else
+            echo "No tests found, skipping."
+          fi
+
+      - name: Run sample (Bank API) and generate reports
+        shell: bash
+        run: |
+          mkdir -p out
+          if [ -f "src/AgenticApiSentry/AgenticApiSentry.csproj" ]; then
+            if [ -f "samples/bank.yaml" ]; then
+              dotnet run --project src/AgenticApiSentry -- samples/bank.yaml || true
+            else
+              echo "samples/bank.yaml not found, skipping run."
+            fi
+          else
+            echo "App not found, skipping run."
+          fi
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentic-api-sentry-reports
+          path: |
+            out/report.md
+            out/results.junit.xml
+          if-no-files-found: ignore
