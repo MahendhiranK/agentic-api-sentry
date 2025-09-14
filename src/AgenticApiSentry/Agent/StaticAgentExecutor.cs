@@ -11,6 +11,7 @@ namespace AgenticApiSentry.Agent
             _mission = mission;
         }
 
+        // Single Builder definition only
         public static Builder Builder() => new Builder();
 
         public async Task<List<ToolResult>> RunAsync(object context)
@@ -35,12 +36,25 @@ namespace AgenticApiSentry.Agent
             private readonly List<ITool> _tools = new();
             private string _mission = string.Empty;
 
-            public Builder WithTools(IEnumerable<ITool> tools) { _tools.AddRange(tools); return this; }
-            public Builder WithMission(string mission) { _mission = mission; return this; }
+            public Builder WithTools(IEnumerable<ITool> tools)
+            {
+                _tools.AddRange(tools);
+                return this;
+            }
+
+            public Builder WithMission(string mission)
+            {
+                _mission = mission;
+                return this;
+            }
+
             public StaticAgentExecutor Build()
             {
-                if (_tools.Count == 0) throw new InvalidOperationException("No tools registered");
-                if (string.IsNullOrWhiteSpace(_mission)) throw new InvalidOperationException("Mission is required");
+                if (_tools.Count == 0)
+                    throw new InvalidOperationException("No tools registered");
+                if (string.IsNullOrWhiteSpace(_mission))
+                    throw new InvalidOperationException("Mission is required");
+
                 return new StaticAgentExecutor(_tools, _mission);
             }
         }
