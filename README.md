@@ -1,7 +1,11 @@
 # Agentic API Sentry (.NET 8) ![CI](https://github.com/MahendhiranK/agentic-api-sentry/actions/workflows/ci.yml/badge.svg) ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
-**Agentic API Sentry** is a lightweight, **static, mission-bound agent** that evaluates any **OpenAPI 3.0 specification** for governance and compliance readiness.  
-It helps architects, developers, and DevOps teams ensure API specs meet **quality, security, and observability standards** before moving into production.
+**Agentic API Sentry** is a lightweight, static agent developed in .NET 8 to evaluate OpenAPI 3.0 specifications for governance and compliance readiness. It helps architects, developers, and DevOps teams ensure that API definitions meet quality, security, and observability standards before production deployment.
+
+Designed for regulated industries such as finance, healthcare, and government, the tool performs deterministic, auditable checks on API specs. It validates OpenAPI structure, detects missing security schemes or undocumented error responses, and identifies rate-limiting headers. It can also safely probe GET endpoints and generate actionable reports in Markdown and JUnit formats for CI/CD pipelines.
+
+This project reflects a commitment to advancing secure, compliant, and resilient API practices in enterprise environments. It demonstrates the ability to create mission-bound, immutable agents that support n
+
 
 ## 📚 Author
 
