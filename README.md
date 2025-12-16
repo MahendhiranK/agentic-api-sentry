@@ -97,7 +97,7 @@ Sampling disabled (no --baseUrl provided). Skipped real HTTP calls.
 ```
 
 ## Roadmap
-- [ ] HTML report output  
+- [ ] HTML / JSON report output  
 - [ ] OpenTelemetry spans for observability  
 - [ ] Policy-as-code (YAML/JSON) for custom rules  
 - [ ] Postman collection export  
