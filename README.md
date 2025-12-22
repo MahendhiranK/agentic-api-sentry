@@ -4,7 +4,7 @@
 
 Designed for regulated industries such as finance, healthcare, and government, the tool performs deterministic, auditable checks on API specs. It validates OpenAPI structure, detects missing security schemes or undocumented error responses, and identifies rate-limiting headers. It can also safely probe GET endpoints and generate actionable reports in Markdown and JUnit formats for CI/CD pipelines.
 
-This project reflects a commitment to advancing secure, compliant, and resilient API practices in enterprise environments. It demonstrates the ability to create mission-bound, immutable agents that support n
+This project reflects a commitment to advancing secure, compliant, and resilient API practices in enterprise environments. It demonstrates how mission-bound, deterministic agents can enforce API governance checks consistently across teams and pipelines.
 
 ## 📚 Author
 
@@ -13,6 +13,8 @@ LinkedIn: [Mahendhiran Krishnan](https://www.linkedin.com/in/mahendhiran-krishna
 
 ## Overview
 Works with or without an LLM. The v1 rules are code-based. If you add an LLM, it will summarize findings.  
+
+LLM integration is optional and out-of-scope for v1; v1 produces deterministic findings, and an LLM can be used externally to summarize the generated report.
 
 Modern enterprises rely on APIs, but ensuring they are **secure, compliant, and resilient** is often overlooked.  
 Agentic API Sentry bridges this gap by acting as an **immutable agent** that runs a fixed set of checks on any OpenAPI spec and generates actionable reports.  
@@ -53,7 +55,7 @@ agentic-api-sentry/
 ### Run
 ```bash
 # Clone
-git clone https://github.com/<your-username>/agentic-api-sentry.git
+git clone https://github.com/MahendhiranK/agentic-api-sentry.git
 cd agentic-api-sentry
 
 # Build
