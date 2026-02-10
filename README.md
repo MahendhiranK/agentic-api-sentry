@@ -1,109 +1,85 @@
-# Agentic API Sentry (.NET 8) ![CI](https://github.com/MahendhiranK/agentic-api-sentry/actions/workflows/ci.yml/badge.svg) ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
+# Agentic API Sentry
+A Runtime Governance and Decision Layer for Agentic and Adaptive API Systems
 
-**Agentic API Sentry** is a lightweight, static agent developed in .NET 8 to evaluate OpenAPI 3.0 specifications for governance and compliance readiness. It helps architects, developers, and DevOps teams ensure that API definitions meet quality, security, and observability standards before production deployment.
+Agentic API Sentry introduces an original architectural pattern for governing API behavior through an external, runtime decision layer. Instead of embedding AI, policy logic, or adaptive rules inside applications or gateways, this approach separates control intelligence from business services entirely.
 
-Designed for regulated industries such as finance, healthcare, and government, the tool performs deterministic, auditable checks on API specs. It validates OpenAPI structure, detects missing security schemes or undocumented error responses, and identifies rate-limiting headers. It can also safely probe GET endpoints and generate actionable reports in Markdown and JUnit formats for CI/CD pipelines.
+The repository serves as a public, reusable architectural reference for introducing agentic decision-making, governance enforcement, and adaptive control at API boundaries without modifying application code.
 
-This project reflects a commitment to advancing secure, compliant, and resilient API practices in enterprise environments. It demonstrates how mission-bound, deterministic agents can enforce API governance checks consistently across teams and pipelines.
+---
+
+## Problem Statement
+
+Modern cloud-native systems struggle to enforce governance, compliance, and adaptive behavior consistently across distributed APIs. Existing approaches present structural limitations:
+
+- API gateways focus on routing and security, not contextual decision-making
+- Service meshes address traffic control but not intent-aware governance
+- Embedding AI or policy logic inside services increases coupling and operational risk
+- Regulated environments restrict dynamic AI behavior inside production systems
+
+As a result, enterprises face hidden integration complexity, governance drift, and limited adaptability at runtime.
+
+---
+
+## Architectural Overview
+
+Agentic API Sentry introduces a **runtime control layer** that observes API traffic, evaluates contextual signals, and enforces decisions externally. The architecture is intentionally decoupled from application services and avoids embedding AI logic into business code.
+
+Core architectural principles:
+- Separation of control logic from business logic
+- Runtime evaluation instead of design-time enforcement
+- Agentic decision-making without model training
+- Applicability to regulated and high-assurance environments
+
+---
+
+## Architectural contribution
+
+This repository represents an architectural contribution to the field of cloud-native integration and agentic system design.
+
+The contribution lies in defining and demonstrating a new runtime pattern where agentic decision logic governs API behavior externally, rather than embedding AI, policy engines, or adaptive logic inside applications, gateways, or service meshes.
+
+Key original aspects include:
+- Externalized agentic control at API boundaries
+- Runtime interception and context evaluation
+- Static-agent driven decisions without LLM dependency
+- Governance and adaptability without service modification
+
+This approach advances current architectural practice by enabling agentic systems in environments where traditional AI-in-service models are impractical or prohibited.
+
+This work is published as a public, reusable reference and is independent of any employer-specific system.
+
+---
+
+## Intended Use Cases
+
+- Financial systems requiring strict governance and auditability
+- Public-sector APIs with compliance constraints
+- Large-scale microservice environments
+- Adaptive API management without embedded AI risk
+- Research and experimentation in agentic architectures
+
+---
+
+## Relation to Research and Patents
+
+This architectural pattern aligns with ongoing research and intellectual property initiatives in:
+- Agentic Microservice Architectures
+- Adaptive API Governance
+- Context-Aware Runtime Control Planes
+- Protocol-less and intent-driven integration models
+
+The repository serves as an executable architectural companion to these research efforts.
+
 
 ## 📚 Author
 
 Mahendhiran Krishnan  
 LinkedIn: [Mahendhiran Krishnan](https://www.linkedin.com/in/mahendhiran-krishnan-04a5292b/)
 
-## Overview
-Works with or without an LLM. The v1 rules are code-based. If you add an LLM, it will summarize findings.  
-
-LLM integration is optional and out-of-scope for v1; v1 produces deterministic findings, and an LLM can be used externally to summarize the generated report.
-
-Modern enterprises rely on APIs, but ensuring they are **secure, compliant, and resilient** is often overlooked.  
-Agentic API Sentry bridges this gap by acting as an **immutable agent** that runs a fixed set of checks on any OpenAPI spec and generates actionable reports.  
-
-This approach is especially useful for **regulated industries** (finance, healthcare, government) where **determinism and auditability** are critical.  
-
-## 🚀 Features (V1)
-- **Spec Linting** – Validates OpenAPI definitions, summaries, responses, and parameters.  
-- **Security Checks** – Detects missing HTTPS servers, absent security schemes, or undocumented 401/403 responses.  
-- **Rate-Limit Detection** – Identifies headers like `X-RateLimit` in API responses.  
-- **Safe Sampling** – Optionally probes up to 5 GET endpoints when a base URL is provided.  
-- **Reporting** – Generates both Markdown (`out/report.md`) and JUnit (`out/results.junit.xml`) outputs for CI/CD pipelines.  
-- **Static Agent Execution** – Tools and mission are bound at runtime and cannot be altered, ensuring predictable behavior.  
-
-
-## 📂 Repository Structure
-```
-agentic-api-sentry/
-├── src/AgenticApiSentry/         # Core library & tools
-│   ├── Agent/                    # Agent executor & interfaces
-│   ├── Tools/                    # Spec lint, security, rate-limit, sampler
-│   ├── OpenApi/                  # OpenAPI loader utilities
-│   └── Reporting/                # Markdown & JUnit report writers
-├── tests/AgenticApiSentry.Tests/ # Unit tests (xUnit)
-├── samples/                      # Example OpenAPI specs (Bank API)
-├── out/                          # Generated reports (gitignored)
-├── README.md
-├── LICENSE
-└── agentic-api-sentry.sln
-```
-
-## ⚡ Quickstart
-
-### Prerequisites
-- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download)  
-- (Optional) Internet access for loading remote OpenAPI specs  
-
-### Run
-```bash
-# Clone
-git clone https://github.com/MahendhiranK/agentic-api-sentry.git
-cd agentic-api-sentry
-
-# Build
-dotnet build
-
-# Evaluate sample Bank API spec
-dotnet run --project src/AgenticApiSentry -- samples/bank.yaml
-
-# Outputs
-# - out/report.md
-# - out/results.junit.xml
-
-# Enable safe GET sampling with explicit base URL
-dotnet run --project src/AgenticApiSentry -- samples/bank.yaml --baseUrl https://api.demo-bank.com/v1
-```
-
-## 📊 Example Report (Markdown Snippet)
-```markdown
-# Agentic API Sentry Report
-Generated: 2025-09-14 12:00 UTC
-
-## LintSpec
-**Severity:** warn  
-2 potential issues  
-- /payments post: missing 401/403 error responses  
-- /transactions get: missing detailed response description  
-
-## SecurityChecks
-**Severity:** warn  
-2 potential security gaps  
-- No explicit security schemes defined for operations (only global placeholder)  
-- /accounts/{accountId} get: no documented 401/403 responses  
-
-## RateLimitHint
-**Severity:** info  
-No explicit rate-limit headers detected in responses  
-
-## Sampler
-**Severity:** info  
-Sampling disabled (no --baseUrl provided). Skipped real HTTP calls.
-```
-
-## Roadmap
-- [ ] HTML / JSON report output  
-- [ ] OpenTelemetry spans for observability  
-- [ ] Policy-as-code (YAML/JSON) for custom rules  
-- [ ] Postman collection export  
-- [ ] Integration with GitHub Actions & Azure Pipelines  
-
 ## 📜 License
 MIT License. See [LICENSE](LICENSE).
+
+
+## Disclaimer
+
+This repository is provided for educational and research purposes and does not represent any proprietary employer system.
